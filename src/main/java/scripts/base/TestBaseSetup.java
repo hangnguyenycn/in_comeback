@@ -4,9 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
  * @class TestBaseSetup
@@ -16,13 +14,16 @@ import org.testng.annotations.Parameters;
  *
  */
 public class TestBaseSetup {
-	private WebDriver driver;
-	private static String homeDir = System.getProperty("user.dir");	
-	private static String driverPathChrome = homeDir+"\\src\\main\\resources\\";
-	static String driverPathIE = "F:\\HANG\\IEDriverServer_Win32_2.53.1\\";
+	private String baseURL;
+	private String browserType;
+	private static String homeDir = System.getProperty("user.dir");
+	private static String driverPathChrome = homeDir + "\\src\\main\\resources\\";
+	private static String driverPathIE = "F:\\HANG\\IEDriverServer_Win32_2.53.1\\";
+	private static String driverPathFirefox = homeDir + "\\src\\main\\resources\\";
 
-	public WebDriver getDriver() {
-		return driver;
+	public TestBaseSetup(String baseURL, String browserType) {
+		this.baseURL = baseURL;
+		this.browserType = browserType;
 	}
 
 	/**
@@ -33,19 +34,18 @@ public class TestBaseSetup {
 	 * @param browserType
 	 * @param baseURL
 	 */
-	private void setDriver(String browserType, String baseURL) {
+	public WebDriver setDriver() {
 		switch (browserType) {
 		case "chrome":
-			driver = initChromeDriver(baseURL);
-			break;
+			System.out.println("init chrome dirver");
+			return initChromeDriver(baseURL);
 		case "firefox":
-			driver = initFirefoxDriver(baseURL);
-			break;
+			return initFirefoxDriver(baseURL);
 		case "ie":
-			driver = initIEDriver(baseURL);
+			return initIEDriver(baseURL);
 		default:
 			System.out.println("browser : " + browserType + " is invalid, Launching Firefox as browser of choice..");
-			driver = initFirefoxDriver(baseURL);
+			return initFirefoxDriver(baseURL);
 		}
 	}
 
@@ -76,7 +76,11 @@ public class TestBaseSetup {
 	 */
 	private static WebDriver initFirefoxDriver(String baseURL) {
 		System.out.println("Launching Firefox browser..");
-		WebDriver driver = new FirefoxDriver();
+		System.setProperty("webdriver.gecko.driver", driverPathFirefox + "geckodriver.exe");
+		// WebDriver driver = new FirefoxDriver();
+		DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+		capabilities.setCapability("marionette", true);
+		WebDriver driver = new FirefoxDriver(capabilities);
 		driver.manage().window().maximize();
 		driver.navigate().to(baseURL);
 		return driver;
@@ -92,33 +96,11 @@ public class TestBaseSetup {
 	 */
 	private static WebDriver initIEDriver(String baseURL) {
 		System.out.println("Launching Internet Explorer browser..");
-		System.setProperty("webdriver.chrome.driver", "F:\\HANG\\IEDriverServer_Win32_2.53.1\\IEDriverServer.exe");
+		System.setProperty("webdriver.ie.driver", driverPathIE + "IEDriverServer.exe");
 		WebDriver driver = new InternetExplorerDriver();
 		driver.manage().window().maximize();
 		driver.navigate().to(baseURL);
 		return driver;
 	}
 
-	/**
-	 * initializeTestBaseSetup
-	 * 
-	 * @author HangNT
-	 * @since 2016/07/04
-	 * @param browserType
-	 * @param baseURL
-	 */
-	@Parameters({ "browserType", "baseURL" })
-	@BeforeClass
-	public void initializeTestBaseSetup(String browserType, String baseURL) {
-		try {
-			setDriver(browserType, baseURL);
-		} catch (Exception e) {
-			System.out.println("Error....." + e.getStackTrace());
-		}
-	}
-
-	@AfterClass
-	public void tearDown() {
-		driver.close();
-	}
 }

@@ -15,7 +15,7 @@ public class HomePage extends CoreActionForm {
 		super(driver);
 	}
 
-	public String baseUrl = "http://live.guru99.com/";
+	//public String baseUrl = "http://live.guru99.com/";
 	public String accountLinkText = "css=a.skip-link.skip-account";
 	public String registerLinkText = "xpath=//*[@id='header-account']//ul/li[5]/a";
 	public String logInLinkText = "xpath=//*[@id='header-account']//ul/li[6]/a";
