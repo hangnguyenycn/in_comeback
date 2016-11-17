@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Traning selenium webdriver">
-	<parameter name="browserType" value="chrome" />
+	<parameter name="browserType" value="firefox" />
 	<parameter name="baseURL" value="http://live.guru99.com/" /> -->
 	<test name="Guru">
 		<classes>
