@@ -28,7 +28,7 @@ public class LoginLogoutScripts {
 
 	@Parameters({ "baseURL", "browserType" })
 	@BeforeClass
-	public void setUp(@Optional("http://live.guru99.com") String baseURL, @Optional("firefox") String browserType) {
+	public void setUp(@Optional("http://live.guru99.com") String baseURL, @Optional("phantomjs") String browserType) {
 		TestBaseSetup baseObj = new TestBaseSetup(baseURL, browserType);
 		driver = baseObj.setDriver();
 	}
@@ -55,6 +55,8 @@ public class LoginLogoutScripts {
 		loginLogoutPageObj.goToLoginPage();
 		loginLogoutPageObj.loginGuru("hangnguyen1611@gmail.com", "123456");
 		Assert.assertEquals(loginLogoutPageObj.getLoginSuccessMsg(), expectLoginLabel);
+		System.out.println("xin chao in2");
+
 	}
 
 	/**

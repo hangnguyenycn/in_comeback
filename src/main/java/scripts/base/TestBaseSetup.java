@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
@@ -20,7 +21,8 @@ public class TestBaseSetup {
 	private static String driverPathChrome = homeDir + "\\src\\main\\resources\\";
 	private static String driverPathIE = "F:\\HANG\\IEDriverServer_Win32_2.53.1\\";
 	private static String driverPathFirefox = homeDir + "\\src\\main\\resources\\";
-
+    private static String driverPathPhantomjs=homeDir+"src\\main\\resources\\phantomjs-2.1.1-windows\\bin\\";
+	
 	public TestBaseSetup(String baseURL, String browserType) {
 		this.baseURL = baseURL;
 		this.browserType = browserType;
@@ -43,12 +45,22 @@ public class TestBaseSetup {
 			return initFirefoxDriver(baseURL);
 		case "ie":
 			return initIEDriver(baseURL);
+		case "phantomjs":
+			return initPhantomjs(baseURL);
 		default:
 			System.out.println("browser : " + browserType + " is invalid, Launching Firefox as browser of choice..");
 			return initFirefoxDriver(baseURL);
 		}
 	}
 
+	private static WebDriver initPhantomjs(String baseURL) {
+		System.out.println("Launching Phantomjs with new profile..");
+		System.setProperty("webdriver.chrome.driver", driverPathPhantomjs + "phantomjs.exe");
+		WebDriver driver = new PhantomJSDriver();
+		driver.manage().window().maximize();
+		driver.navigate().to(baseURL);
+		return driver;
+	}
 	/**
 	 * init chrome driver
 	 * 
